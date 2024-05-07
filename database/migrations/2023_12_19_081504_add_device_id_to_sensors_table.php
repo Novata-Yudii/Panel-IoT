@@ -35,3 +35,4 @@ class AddDeviceIdToSensorsTable extends Migration
         });
     }
 }
+
