@@ -14,13 +14,10 @@ class TemperatureController extends Controller
         $temperature = Temperature::create([
           "temperature" => $data
         ]);
-        // DB::table('temperature')->insert(["temperature"=>$data]);
         return response()->json(
             ["status"=>201,"message"=>"Temperature berhasil disimpan"],201
         );
     }
-
-    // Untuk menampilkan data[GET]
     public function index()
     {
       $data = DB::table('temperature')->orderBy('id','desc')->get();

@@ -1,6 +1,9 @@
 @extends('layouts.main')
 @section("content")
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <div id="container"></div>
 @endsection
 @push('scripts')
@@ -12,7 +15,7 @@ async function requestData() {
         const data = await result.json();
         const temp = data.data[0].temperature;
         const time = data.data[0].created_at;
-        const point = [new Date().getTime(), temp];
+        const point = [new Date().getTime(), parseFloat(temp)];
         const series = chart.series[0], shift = series.data.length > 20;
         chart.series[0].addPoint(point, true, shift);
         setTimeout(requestData, 3000);
@@ -49,7 +52,7 @@ window.addEventListener('load', function () {
         },
         series: [
         {
-            name: 'Time',
+            name: 'Suhu',
             data: []
         }
         ]
