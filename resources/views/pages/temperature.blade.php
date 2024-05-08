@@ -5,21 +5,17 @@
 @endsection
 @push('scripts')
 <script>
-    let chart;
+let chart;
 async function requestData() {
     const result = await fetch('http://127.0.0.1:8000/api/temperature');
     if (result.ok) {
         const data = await result.json();
         const temp = data.data[0].temperature;
         const time = data.data[0].created_at;
-        console.log(temp);
-        console.log(time);
         const point = [new Date().getTime(), temp];
-        const series = chart.series[0],
-        shift = series.data.length > 20; // shift if the series is longer than 20
+        const series = chart.series[0], shift = series.data.length > 20;
         chart.series[0].addPoint(point, true, shift);
-        // call it again after one second
-        setTimeout(requestData, 1000);
+        setTimeout(requestData, 3000);
     }
 }
 
@@ -35,10 +31,13 @@ window.addEventListener('load', function () {
         title: {
             text: 'Data temperature'
         },
+        subtitle: {
+            text: 'Sensor DHT 11'
+        },
         xAxis: {
             type: 'datetime',
             tickPixelInterval: 150,
-            maxZoom: 20 * 1000
+            maxZoom: 20 * 1500
         },
         yAxis: {
             minPadding: 0.2,
@@ -48,10 +47,12 @@ window.addEventListener('load', function () {
                 margin: 80
             }
         },
-        series: [{
+        series: [
+        {
             name: 'Time',
             data: []
-        }]
+        }
+        ]
     });
 });
 </script>
