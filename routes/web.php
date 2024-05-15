@@ -30,3 +30,6 @@ Route::controller(TemperatureController::class)->group(function(){
 });
 
 Route::get('/temperature', [TemperatureController::class, 'index']);
+Route::get('/temperature-mqtt', function(){
+    return view('pages.temperature-mqtt');
+});
