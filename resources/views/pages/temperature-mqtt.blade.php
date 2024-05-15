@@ -26,6 +26,9 @@ window.addEventListener('load', function () {
                 load: requestData
             }
         },
+        time:{
+            timezone: 'Asia/Jakarta'
+        },
         title: {
             text: 'Data temperature'
         },
