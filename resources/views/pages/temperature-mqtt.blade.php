@@ -11,14 +11,13 @@
 <script>
 let chart;
 async function requestData(msg) {
-    const suhu = JSON.parse(msg);
-    const temp = suhu.temperature;
+    const temp = msg.temperature;
     console.log(temp);
     // const time = data.data[0].created_at;
     const point = [new Date().getTime(), parseFloat(temp)];
     const series = chart.series[0], shift = series.data.length > 20;
     chart.series[0].addPoint(point, true, shift);
-    setTimeout(requestData, 3000);
+    // setTimeout(requestData, 3000);
 }
 window.addEventListener('load', function () {
     chart = new Highcharts.Chart({
@@ -89,27 +88,32 @@ PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls
 YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk
 CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
 -----END CERTIFICATE-----`
-        }
-
+            }
         const client  = mqtt.connect(url, options)
         client.on('connect', function () {
         console.log('Connected')
             client.subscribe('/temperature', function (err) {
-                if (!err) {
-                    let dataPub = {value : 1};
-                    dataPub = JSON.stringify(dataPub);
-                    client.publish('/lampu', dataPub);
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('Subscribe in /temperature')
+                }
+            })
+            let pub = {value : 1}
+            pub = JSON.stringify(pub);
+            client.publish('/lampu', pub, function(err){
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('Published')
                 }
             })
         })
 
         client.on('message', async function (topic, message) {
             if(topic == '/temperature'){
-                let msg="";
-                for (let i = 0; i < message.length; i++) {
-                    msg += String.fromCharCode(message[i]);
-                }
-                if(typeof JSON.parse(msg) == 'object'){
+                const msg = JSON.parse(message)
+                if(typeof msg == 'object'){
                     await requestData(msg)
                 }
             }
